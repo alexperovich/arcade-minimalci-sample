@@ -15,7 +15,9 @@ phases:
 
 - template: /eng/common/templates/phases/base.yml
   parameters:
+    agentOs: Windows_NT
     name: Windows_NT
+    enableTelemetry: false
     queue:
       name: Helix
       parallel: 99
@@ -29,7 +31,9 @@ phases:
 
 - template: /eng/common/templates/phases/base.yml
   parameters:
+    agentOs: OSX
     name: OSX
+    enableTelemetry: false
     queue:
       name: Hosted macOS Preview
       parallel: 99
@@ -43,7 +47,9 @@ phases:
 
 - template: /eng/common/templates/phases/base.yml
   parameters:
+    agentOs: Linux
     name: Linux
+    enableTelemetry: false
     queue:
       name: DotNetCore-Linux
       parallel: 99
