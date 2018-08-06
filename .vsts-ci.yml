@@ -12,7 +12,10 @@ trigger:
 
 # Three phases for each of the three OSes we want to run on
 phases:
-  - phase: Windows_NT
+
+- template: /eng/common/templates/phases/base.yml
+  parameters:
+    name: Windows_NT
     queue:
       name: Helix
       parallel: 99
@@ -24,7 +27,9 @@ phases:
     steps:
     - template: eng/build.yml
 
-  - phase: OSX
+- template: /eng/common/templates/phases/base.yml
+  parameters:
+    name: OSX
     queue:
       name: Hosted macOS Preview
       parallel: 99
@@ -36,7 +41,9 @@ phases:
     steps:
     - template: eng/build.yml
 
-  - phase: Linux
+- template: /eng/common/templates/phases/base.yml
+  parameters:
+    name: Linux
     queue:
       name: DotNetCore-Linux
       parallel: 99
