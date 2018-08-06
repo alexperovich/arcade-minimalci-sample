@@ -69,28 +69,6 @@ The variable defined in this matrix (in this case, `_BuildConfig`) can later be 
     arguments: '--configuration $(_BuildConfig)'
 ```
 
-## Avoid code-duplication through templates
-Most builds run nearly identical steps on all configurations. In YAML, **templates** can be used to prevent code duplication and make the build process easier to maintain.
-
-In this sample, our build process is placed in a [build.yml](eng/build.yml) template file. This template is then referenced in the main CI file:
-
-```yaml
-- phase: Windows
-  ...
-  steps:
-  - template: eng/build.yml
-
-- phase: OSX
-  ...
-  steps:
-  - template: eng/build.yml
-
-- phase: Linux
-  ...
-  steps:
-  - template: eng/build.yml
-```
-
 ## Run both CI and PR builds out of the same file
 The current recommendation is that all repositories have a single `.vsts-ci.yml` file which defines all of their builds (CI, PR, and internal). To do this, use YAML `{{ if }}` directives and the VSTS built-in `Build.Reason` variable.
 
