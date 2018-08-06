@@ -22,27 +22,53 @@ trigger:
 # - master
 ```
 
+## Base your builds on Arcade for ease of use
+Arcade is designed to make many of the more complex tasks (such as sending telemetry) simple to do out of the box. It is therefore recommended that all builds base themselves on Arcade's `base.yml` template.
+
+```yaml
+phases:
+- template: /eng/common/templates/phases/base.yml
+  parameters:
+  ...
+```
+
+For now, referencing Arcade means directly copying and pasting the `eng/common` folder from Arcade into your repository. In the future, this will be handled automagically via an enrollment in Maestro.
+
 ## Run builds on multiple operating systems with phases
 VSTS uses **phases** to parallelize your builds. Each phase definition corresponds to a specific queue. Thus, if you would like to have builds run on Windows, OSX, and Linux, you will need to define three phases (each corresponding to a separate queue) as seen in the following example.
 
 ```yaml
 phases:
-  # Define a Windows phase
-  - phase: Windows
+# Define a Windows phase
+- template: /eng/common/templates/phases/base.yml
+  parameters:
+    agentOs: Windows_NT    # Define the operating system; used for sending telemetry
+    name: Windows_NT       # Define the name of the phase
+    enableTelemetry: false # Don't send telemetry to Helix (set to true if you want to sent telemetry)
     queue:
-      name: Helix # the Helix queue is currently the recommended queue for Windows builds
+      name: Helix          # the Helix queue is currently the recommended queue for Windows builds
     ...
 
-  - phase: OSX
+- template: /eng/common/templates/phases/base.yml
+  parameters:
+    agentOs: OSX
+    name: OSX
+    enableTelemetry: false
     queue:
       name: Hosted macOS Preview # as of Aug 2 2018 this is correct; in the future we will switch to a DotNetCore-Mac pool
     ...
 
-  - phase: Linux
+- template: /eng/common/templates/phases/base.yml
+  parameters:
+    agentOs: Linux
+    name: Linux
+    enableTelemetry: false
     queue:
       name: DotNetCore-Linux
     ...
 ```
+
+While you can name and define phases directly (e.g. `phase: Windows_NT`), basing your builds on the Arcade template is much easier.
 
 ## Use matrices to quickly create phases for different build configurations
 VSTS supports using a **matrix** in a phase definition to quickly create several different phases on the same queue with slightly different build configurations. This is the recommended way to quickly add debug and release configuration builds.
