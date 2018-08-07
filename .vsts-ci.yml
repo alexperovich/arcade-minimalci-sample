@@ -2,11 +2,11 @@
 resources:
   repositories:
   # shared library repository
-  - repository: arcade-templates
+  - repository: arcade
     type: github
     endpoint: DotNet-Bot GitHub Connection
     name: dotnet/arcade
-    ref: refs/heads/templates
+    ref: refs/heads/master
 
 variables:
   Build.Repository.Clean: true
@@ -21,8 +21,7 @@ trigger:
 
 # Three phases for each of the three OSes we want to run on
 phases:
-
-- template: /eng/common/templates/phases/base.yml
+- template: /eng/common/templates/phases/base.yml@arcade
   parameters:
     agentOs: Windows_NT
     name: Windows_NT
@@ -38,7 +37,7 @@ phases:
     steps:
     - template: /eng/build.yml
 
-- template: /eng/common/templates/phases/base.yml
+- template: /eng/common/templates/phases/base.yml@arcade
   parameters:
     agentOs: OSX
     name: OSX
@@ -54,7 +53,7 @@ phases:
     steps:
     - template: /eng/build.yml
 
-- template: /eng/common/templates/phases/base.yml
+- template: /eng/common/templates/phases/base.yml@arcade
   parameters:
     agentOs: Linux
     name: Linux
