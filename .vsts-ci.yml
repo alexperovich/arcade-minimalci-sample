@@ -1,4 +1,13 @@
 # Sample VSTS CI file
+resources:
+  repositories:
+  # shared library repository
+  - repository: arcade-templates
+    type: github
+    endpoint: DotNet-Bot GitHub Connection
+    name: dotnet/arcade
+    ref: refs/heads/templates
+
 variables:
   Build.Repository.Clean: true
   targetFramework: netcoreapp2.0
