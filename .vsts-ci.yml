@@ -40,8 +40,6 @@ phases:
         -prepareMachine
       name: Build
       displayName: Build
-      env:
-        OfficialBuildId: $(BUILD.BUILDNUMBER)
       condition: succeeded()
 
 - template: /eng/common/templates/phases/base.yml@arcade
@@ -63,8 +61,6 @@ phases:
         -prepareMachine
       name: Build
       displayName: Build
-      env:
-        OfficialBuildId: $(BUILD.BUILDNUMBER)
       condition: succeeded()
 
 - template: /eng/common/templates/phases/base.yml@arcade
@@ -86,6 +82,4 @@ phases:
         -prepareMachine
       name: Build
       displayName: Build
-      env:
-        OfficialBuildId: $(BUILD.BUILDNUMBER)
       condition: succeeded()
