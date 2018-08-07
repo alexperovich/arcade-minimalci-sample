@@ -35,7 +35,14 @@ phases:
         release_configuration:
           _BuildConfig: Release
     steps:
-    - template: /eng/build.yml
+    - script: eng\common\cibuild.cmd
+        -configuration $(_BuildConfig)
+        -prepareMachine
+      name: Build
+      displayName: Build
+      env:
+        OfficialBuildId: $(BUILD.BUILDNUMBER)
+      condition: succeeded()
 
 - template: /eng/common/templates/phases/base.yml@arcade
   parameters:
@@ -51,7 +58,14 @@ phases:
         release_configuration:
           _BuildConfig: Release
     steps:
-    - template: /eng/build.yml
+    - script: eng\common\cibuild.sh
+        -configuration $(_BuildConfig)
+        -prepareMachine
+      name: Build
+      displayName: Build
+      env:
+        OfficialBuildId: $(BUILD.BUILDNUMBER)
+      condition: succeeded()
 
 - template: /eng/common/templates/phases/base.yml@arcade
   parameters:
@@ -67,4 +81,11 @@ phases:
         release_configuration:
           _BuildConfig: Release
     steps:
-    - template: /eng/build.yml
+    - script: eng\common\cibuild.sh
+        -configuration $(_BuildConfig)
+        -prepareMachine
+      name: Build
+      displayName: Build
+      env:
+        OfficialBuildId: $(BUILD.BUILDNUMBER)
+      condition: succeeded()
