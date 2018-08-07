@@ -1,9 +1,0 @@
-<Project>
-  <PropertyGroup>
-    <!-- DependencyA, DependencyB, DependencyC substrings correspond to
-         DependencyName elements in Version.Details.xml file -->
-    <DependencyAPackageVersion>4.5.0-preview2-26403-05</DependencyAPackageVersion>
-    <DependencyBPackageVersion>4.5.0-preview2-26403-05</DependencyBPackageVersion>
-    <DependencyCPackageVersion>4.5.0-preview2-26403-05</DependencyCPackageVersion>
-  </PropertyGroup>
-</Project>
