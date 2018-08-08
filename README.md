@@ -23,7 +23,7 @@ trigger:
 ```
 
 ## Base your builds on Arcade for ease of use
-Arcade is designed to make many of the more complex tasks (such as sending telemetry) simple to do out of the box. It is therefore recommended that all builds base themselves on Arcade's `base.yml` template. This can be done using VSTS's repository resource model:
+Arcade is designed to make many of the more complex tasks (such as sending telemetry) simple to do out of the box. While these features are not available yet, they are actively being developed, and it is therefore recommended that all builds base themselves on Arcade's `base.yml` template. This can be done using VSTS's repository resource model:
 
 ```yaml
 resources:
@@ -41,10 +41,10 @@ phases:
   ...
 ```
 
-In the future, enrollment in Maestro will make this process unnecessary.
+In the future, repositories can enroll in Maestro to manage their Arcade template usage instead.
 
 ## Use the Arcade SDK for an easier build process
-To make quickstart your builds, you can use the Arcade SDK's build scripts. Clone the `eng/*` folder from this repository and copy [`Directory.Build.props`](Directory.Build.props), [`Directory.Build.targets`](Directory.Build.targets), [`global.json`](global.json), and [`NuGet.Config`](NuGet.Config) into your root directory. To use the build scripts, simply use a `script` task to run `eng\common\cibuild.cmd` on Windows or `eng/common/cibuild.sh` on a Unix-based OS.
+To quickstart your builds, you can use the Arcade SDK's build scripts. Clone the `eng/*` folder from this repository and copy [`Directory.Build.props`](Directory.Build.props), [`Directory.Build.targets`](Directory.Build.targets), [`global.json`](global.json), and [`NuGet.Config`](NuGet.Config) into your root directory. To use the build scripts, simply use a `script` task to run `eng\common\cibuild.cmd` on Windows or `eng/common/cibuild.sh` on a Unix-based OS.
 
 ```yaml
 # for Windows
@@ -88,7 +88,7 @@ The variable defined in this matrix (in this case, `_BuildConfig`) can later be 
 ```
 
 ## Run both CI and PR builds out of the same file
-The current recommendation is that all repositories have a single `.vsts-ci.yml` file which defines all of their builds (CI, PR, and internal). To do this, use YAML `{{ if }}` directives and the VSTS built-in `Build.Reason` variable.
+While this sample repository has no need to do so, there are many scenarios in which you may want to differentiate between different build triggers. The current recommendation is that all repositories have a single `.vsts-ci.yml` file which defines all of their builds (CI, PR, and internal). To do this, use YAML `{{ if }}` directives and the VSTS built-in `Build.Reason` variable.
 
 ```yaml
 - ${{ if notIn(variables['Build.Reason'], 'PullRequest') }}:
