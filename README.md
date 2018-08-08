@@ -23,52 +23,44 @@ trigger:
 ```
 
 ## Base your builds on Arcade for ease of use
-Arcade is designed to make many of the more complex tasks (such as sending telemetry) simple to do out of the box. It is therefore recommended that all builds base themselves on Arcade's `base.yml` template.
+Arcade is designed to make many of the more complex tasks (such as sending telemetry) simple to do out of the box. It is therefore recommended that all builds base themselves on Arcade's `base.yml` template. This can be done using VSTS's repository resource model:
 
 ```yaml
+resources:
+  repositories:
+  # shared library repository
+  - repository: arcade
+    type: github
+    endpoint: DotNet-Bot GitHub Connection
+    name: dotnet/arcade
+    ref: refs/heads/master
+
 phases:
-- template: /eng/common/templates/phases/base.yml
+- template: /eng/common/templates/phases/base.yml@arcade
   parameters:
   ...
 ```
 
-For now, referencing Arcade means directly copying and pasting the `eng/common` folder from Arcade into your repository. In the future, this will be handled automagically via an enrollment in Maestro.
+In the future, enrollment in Maestro will make this process unnecessary.
 
-## Run builds on multiple operating systems with phases
-VSTS uses **phases** to parallelize your builds. Each phase definition corresponds to a specific queue. Thus, if you would like to have builds run on Windows, OSX, and Linux, you will need to define three phases (each corresponding to a separate queue) as seen in the following example.
+## Use the Arcade SDK for an easier build process
+To make quickstart your builds, you can use the Arcade SDK's build scripts. Clone the `eng/*` folder from this repository and copy [`Directory.Build.props`](Directory.Build.props), [`Directory.Build.targets`](Directory.Build.targets), [`global.json`](global.json), and [`NuGet.Config`](NuGet.Config) into your root directory. To use the build scripts, simply use a `script` task to run `eng\common\cibuild.cmd` on Windows or `eng/common/cibuild.sh` on a Unix-based OS.
 
 ```yaml
-phases:
-# Define a Windows phase
-- template: /eng/common/templates/phases/base.yml
-  parameters:
-    agentOs: Windows_NT    # Define the operating system; used for sending telemetry
-    name: Windows_NT       # Define the name of the phase
-    enableTelemetry: false # Don't send telemetry to Helix (set to true if you want to sent telemetry)
-    queue:
-      name: Helix          # the Helix queue is currently the recommended queue for Windows builds
-    ...
+# for Windows
+steps:
+- script: eng\common\cibuild.cmd
+    -configuration $(_BuildConfig)
+    -prepareMachine
 
-- template: /eng/common/templates/phases/base.yml
-  parameters:
-    agentOs: OSX
-    name: OSX
-    enableTelemetry: false
-    queue:
-      name: Hosted macOS Preview # as of Aug 2 2018 this is correct; in the future we will switch to a DotNetCore-Mac pool
-    ...
-
-- template: /eng/common/templates/phases/base.yml
-  parameters:
-    agentOs: Linux
-    name: Linux
-    enableTelemetry: false
-    queue:
-      name: DotNetCore-Linux
-    ...
+# for Unix-based
+steps:
+- script: eng/common/cibuild.sh
+    --configuration $(_BuildConfig)
+    --prepareMachine
 ```
 
-While you can name and define phases directly (e.g. `phase: Windows_NT`), basing your builds on the Arcade template is much easier.
+Note: for the Unix-based scripts to work, make sure you clone rather than copy/paste while on Windows&mdash;copying and pasting will remove the `x` chmod parameter from the Unix scripts, which will build breaks when attempting to run them.
 
 ## Use matrices to quickly create phases for different build configurations
 VSTS supports using a **matrix** in a phase definition to quickly create several different phases on the same queue with slightly different build configurations. This is the recommended way to quickly add debug and release configuration builds.
