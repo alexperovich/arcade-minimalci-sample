@@ -56,6 +56,7 @@ phases:
         release_configuration:
           _BuildConfig: Release
     steps:
+    - script: chmod +x eng/common/cibuild.sh & ls -la eng/common/
     - script: eng/common/cibuild.sh
         -configuration $(_BuildConfig)
         -prepareMachine
@@ -77,6 +78,7 @@ phases:
         release_configuration:
           _BuildConfig: Release
     steps:
+    - script: chmod +x eng/common/cibuild.sh & ls -la eng/common/
     - script: eng/common/cibuild.sh
         -configuration $(_BuildConfig)
         -prepareMachine
